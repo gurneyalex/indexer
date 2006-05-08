@@ -1,0 +1,16 @@
+This package provides an abstraction for full text indexing with different DBMS 
+
+INSTALL
+-------
+python setup.py install
+
+
+USAGE
+-----
+
+The use of the tsearch module requires initialisation with postgresql
+super user priviledges. 
+
+Debian users: the postgresql-contrib-8.1 package does not include
+tsearch, only tsearch2 which is currently not supported. Use an
+earlier version of the database server. 

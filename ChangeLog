@@ -1,0 +1,40 @@
+ChangeLog for indexer
+=====================
+
+2006-04-27  --  0.5.0
+    * use tsearch2 by default. To use tsearch, give postgres7 as driver
+
+2006-03-28  --  0.4.2
+    * update api to correctly handle NOT and has_text queries
+	
+2006-03-15  --  0.4.1
+    * add parameter to handle join with an external table
+	
+2006-03-14  --  0.4.0
+    * low level api for better full text search integration
+      in external tools
+    
+
+2006-01-24  --  0.3.1
+    * on more schema related function to handle grant
+	
+2006-01-23  --  0.3.0
+    * api changes for schema retreival (#10447)
+	
+
+2005-09-22  --  0.2.1
+    * Fixed search path of tsearch.sql
+    * Build for python2.4
+
+2005-07-25  --  0.2.0
+    * actually handle other database than postgres
+    * fix default indexer queries
+    * add tests
+    * api changes to get schema (optional drop)
+	
+
+2005-02-25  --  0.1.0
+    * open changelog
+
+
+

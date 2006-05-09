@@ -8,7 +8,7 @@ indexer packaging information
 __revision__ = "$Id: __pkginfo__.py,v 1.18 2006-04-27 10:08:08 syt Exp $"
 
 modname = "indexer"
-numversion = [0, 5, 0]
+numversion = [0, 5, 1]
 version = '.'.join([str(num) for num in numversion])
 
 license = 'LCL'

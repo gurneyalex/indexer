@@ -59,7 +59,7 @@ def normalize(word, letters=NORM_LETTERS, encoding='UTF-8'):
 class Indexer:
     """the base indexer
 
-    provide an inefficient but generic indexing method which can be overriden
+    provide an inefficient but generic indexing method which can be overridden
     """
     table = 'appears'
     uid_attr = 'uid'

@@ -2,16 +2,17 @@ Source: indexer
 Section: python
 Priority: optional
 Maintainer: Sylvain Thenault <sylvain.thenault@logilab.fr> 
-Build-Depends: debhelper (>= 4.0.0), python-dev
-Standards-Version: 3.6.2
+Build-Depends: debhelper (>= 5.0.37.1), python-dev (>=2.3.5-7), python (>=2.3.5-7), python-central
+XS-Python-Version: all
+Standards-Version: 3.7.2
 
 Package: python-indexer
 Architecture: all
-Depends: python
+Depends: ${python:Depends}
 Suggests: postgresql-contrib-8.0 | postgresql-contrib-7.4
-Provides: python2.2-indexer, python2.3-indexer
 Conflicts: python2.2-indexer, python2.3-indexer
 Replaces: python2.2-indexer, python2.3-indexer
+XB-Python-Version: ${python:Versions}
 Description: a RDBMS full text index library for python
  A library providing an abstraction for full text index in
  different RDBMS, using when possible native capabilites of the DBMS

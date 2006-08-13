@@ -1,8 +1,5 @@
-include SUGGESTS
 include README
-include TODO 
 include ChangeLog
-include DEPENDS
  
 include *.sql
 include query.g

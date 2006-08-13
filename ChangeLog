@@ -1,6 +1,9 @@
 ChangeLog for indexer
 =====================
 
+2006-05-09  --  0.5.1
+    * fix 14094: remove remaining assert driver==postgres8
+
 2006-04-27  --  0.5.0
     * use tsearch2 by default. To use tsearch, give postgres7 as driver
 

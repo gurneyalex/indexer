@@ -10,7 +10,7 @@ __revision__ = '$Id: search.py,v 1.4 2005-02-25 23:24:29 nico Exp $'
 import sys
 import getopt
 from os import environ
-from logilab.common.db import get_connexion
+from logilab.common.db import get_connection
 from indexer.default_indexer import Indexer
 
 def help():
@@ -33,7 +33,7 @@ def run(*args):
     if not args:
         help()
     
-    cnx = get_connexion(driver, *db_uri.split(':'))
+    cnx = get_connection(driver, *db_uri.split(':'))
     indexer = Indexer(cnx)
     query = ' '.join(args)
     print 'Looking for ', query

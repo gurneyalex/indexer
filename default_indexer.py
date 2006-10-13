@@ -1,11 +1,9 @@
 # -*- coding: ISO-8859-1 -*-
 """
-Copyright 2003-2005 Logilab -  All Rights Reserved.
+Copyright 2003-2006 Logilab -  All Rights Reserved.
 
 Generic Indexer, may be used on ony database supporting the python DB api
 """
-
-__revision__ = '$Id: default_indexer.py,v 1.16 2006-05-05 10:21:11 david Exp $'
 
 import re
 
@@ -17,6 +15,7 @@ from indexer._exceptions import StopWord
 
 
 NORM_LETTERS = { u'à': 'a', u'ä': 'a', u'â': 'a',
+                 u'ç': 'c',
                  u'é': 'e', u'è': 'e', u'ë': 'e', u'ê': 'e',
                  u'ï': 'i', u'î': 'i',
                  u'ö': 'o', u'ô': 'o',

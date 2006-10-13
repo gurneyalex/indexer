@@ -1,6 +1,9 @@
 ChangeLog for indexer
 =====================
 
+2006-10-13  --  0.5.2
+    * translate "ç" -> "c"
+	
 2006-05-09  --  0.5.1
     * fix 14094: remove remaining assert driver==postgres8
 

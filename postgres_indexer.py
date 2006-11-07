@@ -1,13 +1,11 @@
 """
-Copyright 2003-2005 Logilab - All Rights Reserved.
+Copyright 2003-2006 Logilab - All Rights Reserved.
 
 Indexer for postgres using tsearch  from the openfts project
 (http://openfts.sourceforge.net/)
 
 Warning: you will need to run the script with db super user priviledges. 
 """
-
-__revision__ = '$Id: postgres_indexer.py,v 1.22 2006-04-27 09:45:46 syt Exp $'
 
 from os.path import join, dirname, isfile
 import glob
@@ -29,13 +27,10 @@ class PGIndexer(Indexer):
         words = []
         for word in obj.get_words():
             try:
-                words.append(normalize(word, encoding=self.encoding))
+                words.append(normalize(word))
             except StopWord:
                 continue
         if words:
-            print "INSERT INTO appears(uid, words) VALUES (%(uid)s,%(wrds)s);", \
-                  {'uid':uid, 'wrds': ' '.join(words)}
-            
             cursor.execute("INSERT INTO appears(uid, words) "
                            "VALUES (%(uid)s,%(wrds)s);",
                            {'uid':uid, 'wrds': ' '.join(words)})

@@ -22,7 +22,7 @@ NORM_LETTERS = { u'à': 'a', u'ä': 'a', u'â': 'a',
                  u'ù': 'u', u'ü': 'u', u'û': 'u',
                  }
 
-def normalize(word, letters=NORM_LETTERS, encoding='UTF-8'):
+def normalize(word, letters=NORM_LETTERS):
     """ Return the normalized form for a word
     The word given in argument should be unicode !
 
@@ -36,6 +36,7 @@ def normalize(word, letters=NORM_LETTERS, encoding='UTF-8'):
        _ single letter
        _ numbers
     """
+    assert isinstance(word, unicode), '%r shoud be unicode' % word
     # do not index single letters
     if len(word) == 1:
         raise StopWord()
@@ -51,7 +52,8 @@ def normalize(word, letters=NORM_LETTERS, encoding='UTF-8'):
         norm_word.append(letters.get(char, char))
     result = ''.join(norm_word)
     if isinstance(result, unicode):
-        result = result.encode(encoding)
+        # this will remove extra non ascii characters
+        result = result.encode('ascii', 'ignore')
     return result
 
 
@@ -127,7 +129,7 @@ class Indexer:
         
     def _save_word(self, uid, word, position, cursor):
         try:
-            word = normalize(word, encoding=self.encoding)
+            word = normalize(word)
         except StopWord:
             return
         cursor.execute("SELECT word_id FROM word WHERE word=%(word)s;",

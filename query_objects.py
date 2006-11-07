@@ -1,13 +1,10 @@
 # -*- coding: ISO-8859-1 -*-
 """
-Copyright 2003-2005 Logilab - All Rights Reserved.
+Copyright 2003-2006 Logilab - All Rights Reserved.
 
 Query objects for Generic Indexer
 """
 
-__revision__ = '$Id: query_objects.py,v 1.10 2005-07-05 08:56:58 syt Exp $'
-
-from __future__ import generators
 import re
 
 from indexer._exceptions import StopWord

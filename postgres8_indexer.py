@@ -1,11 +1,9 @@
 """
 Copyright 2005-2006 Logilab - All Rights Reserved.
 
-Indexer for postgres using tsearch  from the openfts project
+Indexer for postgres using tsearch2 from the openfts project
 (http://openfts.sourceforge.net/)
 """
-
-__revision__ = '$Id: postgres8_indexer.py,v 1.10 2006-05-05 10:21:11 david Exp $'
 
 from os.path import join, dirname, isfile
 import glob
@@ -27,7 +25,7 @@ class PGIndexer(Indexer):
         words = []
         for word in obj.get_words():
             try:
-                words.append(normalize(word, encoding=self.encoding))
+                words.append(normalize(word))
             except StopWord:
                 continue
         if words:

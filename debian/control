@@ -9,7 +9,7 @@ Standards-Version: 3.7.2
 Package: python-indexer
 Architecture: all
 Depends: ${python:Depends}
-Suggests: postgresql-contrib-8.0 | postgresql-contrib-7.4
+Recommends: postgresql-contrib-8.1
 Conflicts: python2.2-indexer, python2.3-indexer
 Replaces: python2.2-indexer, python2.3-indexer
 XB-Python-Version: ${python:Versions}

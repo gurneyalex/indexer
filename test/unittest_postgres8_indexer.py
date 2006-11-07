@@ -2,9 +2,9 @@ import unittest
 
 from logilab.common.testlib import MockConnection
 from unittest_default_indexer import IndexableObject
-    
+
 from indexer.query_objects import tokenize
-from indexer.postgres_indexer import PGIndexer
+from indexer.postgres8_indexer import PGIndexer
     
 class PGIndexerTC(unittest.TestCase):
 
@@ -15,16 +15,14 @@ class PGIndexerTC(unittest.TestCase):
     def test_index_object(self):
         self.indexer.index_object(1, IndexableObject())
         self.assertEquals(self.cnx.received,
-                          [('INSERT INTO appears(uid, words) VALUES (%(uid)s,%(wrds)s);',
-                            {'wrds': 'ginco jpl bla blip blop blap', 'uid': 1})
-                           ])
+                          [("INSERT INTO appears(uid, words) VALUES (%(uid)s,to_tsvector('default', %(wrds)s));",
+                            {'wrds': 'ginco jpl bla blip blop blap', 'uid': 1})])
         
     def test_execute(self):
         self.indexer.execute(u'ginco-jpl')
         self.assertEquals(self.cnx.received,
-                          [("SELECT 1, uid FROM appears WHERE words @@ 'ginco&jpl'",
-                            None)
-                           ])
+                          [("SELECT 1, uid FROM appears WHERE words @@ to_tsquery('default', 'ginco&jpl')",
+                            None)])
         
 
 if __name__ == '__main__':

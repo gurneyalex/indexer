@@ -1,6 +1,10 @@
 ChangeLog for indexer
 =====================
 
+ --
+    * fix word normalization to remove any non ascii share, avoiding
+      possible backend problems (e.g. misconfigured(?) tsearch2)
+	
 2006-10-13  --  0.5.2
     * translate "ç" -> "c"
 	

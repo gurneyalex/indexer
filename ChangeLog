@@ -1,7 +1,7 @@
 ChangeLog for indexer
 =====================
 
- --
+2006-11-14  --  0.5.3
     * fix word normalization to remove any non ascii share, avoiding
       possible backend problems (e.g. misconfigured(?) tsearch2)
 	

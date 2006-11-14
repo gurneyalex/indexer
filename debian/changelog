@@ -1,3 +1,10 @@
+indexer (0.5.3-1) unstable; urgency=low
+
+  * new upstream release
+  * fixed postgres-contrib dependency
+
+ -- Sylvain Thénault <sylvain.thenault@logilab.fr>  Tue, 14 Nov 2006 15:00:03 +0100
+
 indexer (0.5.2-1) unstable; urgency=low
 
   * new upstream release

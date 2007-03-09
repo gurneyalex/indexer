@@ -1,5 +1,5 @@
 """
-Copyright (c) 2003-2006 LOGILAB S.A. (Paris, FRANCE).
+Copyright (c) 2003-2007 LOGILAB S.A. (Paris, FRANCE).
 http://www.logilab.fr/ -- mailto:contact@logilab.fr
 
 indexer packaging information
@@ -10,7 +10,7 @@ numversion = (0, 5, 3)
 version = '.'.join([str(num) for num in numversion])
 
 license = 'LCL'
-copyright = '''Copyright (c) 2003-2006 LOGILAB S.A. (Paris, FRANCE).
+copyright = '''Copyright (c) 2003-2007 LOGILAB S.A. (Paris, FRANCE).
 http://www.logilab.fr/ -- mailto:contact@logilab.fr'''
 
 author = "Sylvain Thenault"
@@ -26,4 +26,4 @@ include_dirs = []
 # debianize info
 debian_maintainer = 'Sylvain Thenault'
 debian_maintainer_email = 'sylvain.thenault@logilab.fr'
-pyversions = ['2.2', '2.3', '2.4']
+pyversions = ['2.4']

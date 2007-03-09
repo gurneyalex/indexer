@@ -1,12 +1,8 @@
 """
-Copyright 2003-2005 Logilab -  All Rights Reserved.
+Copyright 2003-2007 Logilab -  All Rights Reserved.
 
 Generic Indexer
 """
-
-__revision__ = '$Id: indexable_objects.py,v 1.9 2005-07-05 08:56:58 syt Exp $'
-
-from __future__ import generators
 
 import os
 import mimetypes

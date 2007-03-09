@@ -2,9 +2,6 @@
 yapps input grammar for indexer queries
 """
 
-__revision__ = "$Id: query.py,v 1.2 2005-02-25 23:24:29 nico Exp $"
-
-
 from yappsrt import *
 from string import *
 import re

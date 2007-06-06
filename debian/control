@@ -2,13 +2,15 @@ Source: indexer
 Section: python
 Priority: optional
 Maintainer: Sylvain Thenault <sylvain.thenault@logilab.fr> 
-Build-Depends: debhelper (>= 5.0.37.1), python-dev (>=2.3.5-7), python (>=2.3.5-7), python-central
+Uploaders: Alexandre Fayolle <afayolle@debian.org>
+Build-Depends: debhelper (>= 5.0.38)
+Build-Depends-Indep: python (>=2.3.5-7), python-central (>= 0.5.6)
 XS-Python-Version: all
 Standards-Version: 3.7.2
 
 Package: python-indexer
 Architecture: all
-Depends: ${python:Depends}
+Depends: python
 Recommends: postgresql-contrib-8.1
 Conflicts: python2.2-indexer, python2.3-indexer
 Replaces: python2.2-indexer, python2.3-indexer

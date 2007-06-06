@@ -18,8 +18,4 @@ XB-Python-Version: ${python:Versions}
 Description: a RDBMS full text index library for python
  A library providing an abstraction for full text index in
  different RDBMS, using when possible native capabilites of the DBMS
- .
- Warning: the tsearch engine is not available in
- postgreql-contrib-8.1. Since this package does not yet work with
- tsearch2, you will have to use it with earlier versions of the
- postgresql server
+ 

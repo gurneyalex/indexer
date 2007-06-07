@@ -68,8 +68,10 @@ class PGIndexer(Indexer):
                 words.append(normalize(word))
             except StopWord:
                 continue
-        sql = "%s.words @@ to_tsquery('default', '%s')" % (tablename,
-                                                           '&'.join(words))
+        # XXX replace '%' since it makes tsearch fail, dunno why yet, should
+        # be properly fixed
+        searched = '&'.join(words).replace('%', '')
+        sql = "%s.words @@ to_tsquery('default', '%s')" % (tablename, searched)
         if not_:
             sql = 'NOT (%s)' % sql
         if jointo is None:

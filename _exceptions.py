@@ -5,8 +5,6 @@ http://www.logilab.fr/ -- mailto:contact@logilab.fr
 exceptions for the indexer modules
 """
 
-__revision__ = "$Id: _exceptions.py,v 1.3 2005-02-25 23:24:29 nico Exp $"
-
 class IndexerException(Exception):
     """base class for indexer exception
     """

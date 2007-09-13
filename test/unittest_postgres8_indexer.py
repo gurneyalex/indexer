@@ -21,8 +21,8 @@ class PGIndexerTC(unittest.TestCase):
     def test_execute(self):
         self.indexer.execute(u'ginco-jpl')
         self.assertEquals(self.cnx.received,
-                          [("SELECT 1, uid FROM appears WHERE words @@ to_tsquery('default', 'ginco&jpl')",
-                            None)])
+                          [("SELECT 1, uid FROM appears WHERE words @@ to_tsquery('default', %(words)s)",
+                            {'words': 'ginco&jpl'})])
         
 
 if __name__ == '__main__':

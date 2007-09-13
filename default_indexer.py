@@ -1,6 +1,6 @@
-# -*- coding: ISO-8859-1 -*-
+# -*- coding: utf-8 -*-
 """
-Copyright 2003-2006 Logilab -  All Rights Reserved.
+Copyright 2003-2007 Logilab -  All Rights Reserved.
 
 Generic Indexer, may be used on ony database supporting the python DB api
 """
@@ -8,21 +8,35 @@ Generic Indexer, may be used on ony database supporting the python DB api
 import re
 
 from logilab.common.db import get_adv_func_helper
+from logilab.common.textutils import unormalize
 
 from indexer.query import IndexerQuery, IndexerQueryScanner
 from indexer.query_objects import Query, tokenize
 from indexer._exceptions import StopWord
 
+    
+REM_PUNC = re.compile(r"[,.;:!?\n\r\t\)\(Â«Â»\<\>/\\\|\[\]{}^#@$Â£_=+\-*&Â§]")
 
-NORM_LETTERS = { u'à': 'a', u'ä': 'a', u'â': 'a',
-                 u'ç': 'c',
-                 u'é': 'e', u'è': 'e', u'ë': 'e', u'ê': 'e',
-                 u'ï': 'i', u'î': 'i',
-                 u'ö': 'o', u'ô': 'o',
-                 u'ù': 'u', u'ü': 'u', u'û': 'u',
-                 }
+SQL_SCHEMA = """
 
-def normalize(word, letters=NORM_LETTERS):
+%s
+
+CREATE TABLE word (
+  word_id INTEGER PRIMARY KEY NOT NULL,
+  word    VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE appears(
+  uid     INTEGER,
+  word_id INTEGER REFERENCES word ON DELETE CASCADE,
+  pos     INTEGER NOT NULL
+);
+
+CREATE INDEX appears_uid ON appears (uid);
+CREATE INDEX appears_word_id ON appears (word_id);
+"""
+
+def normalize(word):
     """ Return the normalized form for a word
     The word given in argument should be unicode !
 
@@ -46,16 +60,17 @@ def normalize(word, letters=NORM_LETTERS):
         raise StopWord()
     except ValueError:
         pass
-    norm_word = []
-    word =  word.lower()
-    for char in word:
-        norm_word.append(letters.get(char, char))
-    result = ''.join(norm_word)
-    if isinstance(result, unicode):
-        # this will remove extra non ascii characters
-        result = result.encode('ascii', 'ignore')
-    return result
+    word = unormalize(word.lower(), ignorenonascii=True)
+    return word.encode('ascii', 'ignore')
 
+def normalize_words(rawwords):
+    words = []
+    for word in rawwords:
+        try:
+            words.append(normalize(word))
+        except StopWord:
+            continue
+    return words
 
 class Indexer:
     """the base indexer
@@ -68,9 +83,10 @@ class Indexer:
     
     def __init__(self, driver, cnx=None, encoding='UTF-8'):
         """cnx : optional Python DB API 2.0 connexion"""
+        self.driver = driver
         self._cnx = cnx
         self.encoding = encoding
-        self.adv_func_helper = get_adv_func_helper(driver)
+        self.dbhelper = get_adv_func_helper(driver)
 
     def index_object(self, uid, obj, cnx=None):
         """ index an object with the given uid
@@ -136,7 +152,7 @@ class Indexer:
                        {'word':word})
         wid = cursor.fetchone()
         if wid is None:
-            wid = self.adv_func_helper.increment_sequence(cursor, 'word_id_seq')
+            wid = self.dbhelper.increment_sequence(cursor, 'word_id_seq')
             try:
                 cursor.execute('''INSERT INTO word(word_id, word)
                 VALUES (%(uid)s,%(word)s);''', {'uid':wid, 'word':word})
@@ -177,55 +193,23 @@ class Indexer:
         if jointo is None:
             return sql
         return '%s AND %s.uid=%s' % (sql, tablename, jointo)
+
+    def init_extensions(self, cursor, owner=None):
+        """if necessary, install extensions at database creation time"""
+        pass
     
-    
-REM_PUNC = re.compile(r"[,.;:!?\n\r\t\)\(«»\<\>/\\\|\[\]{}^#@$£_=+\-*&§]")
+    def sql_init_fti(self):
+        """return the sql definition of table()s used by the full text index"""
+        return SQL_SCHEMA % self.dbhelper.sql_create_sequence('word_id_seq')
 
-SQL_SCHEMA = """
-
-%s
-
-CREATE TABLE word (
-  word_id INTEGER PRIMARY KEY NOT NULL,
-  word    VARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE appears(
-  uid     INTEGER,
-  word_id INTEGER REFERENCES word ON DELETE CASCADE,
-  pos     INTEGER NOT NULL
-);
-
-CREATE INDEX appears_uid ON appears (uid);
-CREATE INDEX appears_word_id ON appears (word_id);
-"""
-
-
-def indexer_definition(driver='postgres'):
-    return ''
-    
-
-def indexer_relation(driver='postgres'):
-    """return the sql definition of the relation used by indexer (require
-    definition to be already in)
-    """
-    helper = get_adv_func_helper(driver)
-    schema = SQL_SCHEMA % helper.sql_create_sequence('word_id_seq')
-    return schema
-
-
-def indexer_drop_relation(driver='postgres'):
-    """return the sql definition of the relation used by indexer (require
-    definition to be already in)
-    """
-    return '''
-DROP TABLE appears;
+    def sql_drop_fti(self):
+        """drop tables used by the full text index"""
+        return '''DROP TABLE appears;
 DROP TABLE word;'''
 
-get_schema = indexer_relation
 
-def indexer_grants(user):
-    return '''GRANT ALL ON appears_uid TO %s;
+    def sql_grant_user(self, user):
+        return '''GRANT ALL ON appears_uid TO %s;
 GRANT ALL ON appears_word_id TO %s;
 GRANT ALL ON appears TO %s;
 GRANT ALL ON word TO %s;

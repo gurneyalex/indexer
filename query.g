@@ -1,10 +1,6 @@
 """ yapps input grammar for indexer queries
 """
 
-__revision__ = "$Id: query.g,v 1.2 2006-03-06 12:55:44 syt Exp $"
-
-
-
 %%
 
 parser IndexerQuery:

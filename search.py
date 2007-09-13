@@ -5,8 +5,6 @@ Execute a search in an indexer database
 USAGE: %s <query string>
 """
 
-__revision__ = '$Id: search.py,v 1.4 2005-02-25 23:24:29 nico Exp $'
-
 import sys
 import getopt
 from os import environ

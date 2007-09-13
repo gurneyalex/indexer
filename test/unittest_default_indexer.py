@@ -4,7 +4,7 @@ import unittest
 from logilab.common.testlib import MockConnection
     
 from indexer.query_objects import tokenize
-from indexer.default_indexer import Indexer, get_schema
+from indexer.default_indexer import Indexer
 
 class IndexableObject:
     def get_words(self):
@@ -51,7 +51,8 @@ class IndexerTC(unittest.TestCase):
 class GetSchemaTC(unittest.TestCase):
 
     def test(self):
-        self.assertEquals(get_schema('sqlite'),
+        indexer = Indexer('sqlite')
+        self.assertEquals(indexer.sql_init_fti(),
                           '''
 
 CREATE TABLE word_id_seq (last INTEGER);

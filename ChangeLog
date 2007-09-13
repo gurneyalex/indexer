@@ -1,6 +1,12 @@
 ChangeLog for indexer
 =====================
 
+ --
+    * mysql indexer
+    * remove support for postgres 7 (tsearch 1)
+    * nicer api
+
+	
 2007-06-07  --  0.5.4
     * remove '%' for tsearch searched term to avoid getting a TypeError
 	

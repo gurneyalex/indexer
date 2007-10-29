@@ -6,7 +6,7 @@ indexer packaging information
 """
 
 modname = "indexer"
-numversion = (0, 5, 4)
+numversion = (0, 6, 0)
 version = '.'.join([str(num) for num in numversion])
 
 license = 'LCL'

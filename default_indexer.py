@@ -7,7 +7,7 @@ Generic Indexer, may be used on ony database supporting the python DB api
 
 import re
 
-from logilab.common.db import get_adv_func_helper
+from logilab.common.adbh import get_adv_func_helper
 from logilab.common.textutils import unormalize
 
 from indexer.query import IndexerQuery, IndexerQueryScanner

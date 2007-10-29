@@ -1,7 +1,7 @@
 ChangeLog for indexer
 =====================
 
- --
+2007-10-29  --  0.6.0
     * mysql indexer
     * remove support for postgres 7 (tsearch 1)
     * nicer api

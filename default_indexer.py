@@ -50,7 +50,7 @@ def normalize(word):
        _ single letter
        _ numbers
     """
-    assert isinstance(word, unicode), '%r shoud be unicode' % word
+    assert isinstance(word, unicode), '%r should be unicode' % word
     # do not index single letters
     if len(word) == 1:
         raise StopWord()
@@ -88,6 +88,9 @@ class Indexer:
         self.encoding = encoding
         self.dbhelper = get_adv_func_helper(driver)
 
+    def has_fti_table(self, cursor):
+        return self.table in self.dbhelper.list_tables(cursor)
+    
     def index_object(self, uid, obj, cnx=None):
         """ index an object with the given uid
         the object should inherit from or be compatible with Indexable object
@@ -133,7 +136,7 @@ class Indexer:
     def cursor_index_object(self, uid, obj, cursor):
         position = 0
         for word in obj.get_words():
-            self._save_word(uid, word.lower(), position, cursor)
+            self._save_word(uid, word, position, cursor)
             position += 1
 
     def cursor_unindex_object(self, uid, cursor):

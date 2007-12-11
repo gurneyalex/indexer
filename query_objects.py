@@ -1,4 +1,4 @@
-# -*- coding: ISO-8859-1 -*-
+# -*- coding: utf-8 -*-
 """
 Copyright 2003-2006 Logilab - All Rights Reserved.
 
@@ -10,7 +10,7 @@ import re
 from indexer._exceptions import StopWord
 
 # a word has no punctuation
-RE_WORD = "[^ ,.;:!?\"\n\r\t)(«»\\<\\>/\\\\\\|\\[\\]{}^#@$£_'=+\\-*&§]+"
+RE_WORD = "[^ ,.;:!?\"\n\r\t)(Â«Â»\\<\\>/\\\\\\|\\[\\]{}^#@$Â£_'=+\\-*&Â§]+"
 #
 RE_DATE = r"\d{2,4}[/-]\d{2,2}[/-]\d{2,4}"
 #

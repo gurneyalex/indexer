@@ -1,6 +1,9 @@
 ChangeLog for indexer
 =====================
 
+2007-12-11  --  0.6.1
+    * method to test fti table availibility
+	
 2007-10-29  --  0.6.0
     * mysql indexer
     * remove support for postgres 7 (tsearch 1)

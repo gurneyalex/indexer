@@ -23,7 +23,10 @@ class PGIndexerTC(unittest.TestCase):
         self.assertEquals(self.cnx.received,
                           [("SELECT 1, uid FROM appears WHERE words @@ to_tsquery('default', %(words)s)",
                             {'words': 'ginco&jpl'})])
-        
 
+    def test_embedded_tsearch2_is_found(self):
+        # just make sure that something is found
+        fullpath = self.indexer.find_tsearch2_schema()
+        
 if __name__ == '__main__':
     unittest.main()

@@ -78,6 +78,16 @@ class PGIndexer(Indexer):
             return sql
         return "%s AND %s.uid=%s" % (sql, tablename, jointo)
 
+    def find_tsearch2_schema(self):
+        """looks up for tsearch2.sql in a list of default paths
+        """
+        for path in TSEARCH_SCHEMA_PATH:
+            for fullpath in glob.glob(path):
+                if isfile(fullpath):
+                    # tsearch2.sql found !
+                    return fullpath
+        raise RuntimeError("can't find tsearch2.sql")
+    
     def init_extensions(self, cursor, owner=None):
         """if necessary, install extensions at database creation time
         
@@ -94,12 +104,7 @@ class PGIndexer(Indexer):
                 for table in tstables:
                     cursor.execute('ALTER TABLE %s OWNER TO %s' % (table, owner))
         else:
-            for path in TSEARCH_SCHEMA_PATH:
-                for fullpath in glob.glob(path):
-                    if isfile(fullpath):
-                        break
-            else:
-                raise Exception("can't find tsearch2.sql")
+            fullpath = self.find_tsearch2_schema()
             cursor.execute(open(fullpath).read())
             print 'tsearch2.sql installed'
 

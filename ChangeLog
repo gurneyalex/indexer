@@ -1,6 +1,9 @@
 ChangeLog for indexer
 =====================
 
+2008-03-26  --  0.6.2
+    * fix tsearch2.sql lookup algorithm
+
 2007-12-11  --  0.6.1
     * method to test fti table availibility
 	

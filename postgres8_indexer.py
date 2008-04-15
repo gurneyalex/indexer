@@ -1,5 +1,5 @@
 """
-Copyright 2005-2007 Logilab - All Rights Reserved.
+Copyright 2005-2008 Logilab - All Rights Reserved.
 
 Indexer for postgres using tsearch2 from the openfts project
 (http://openfts.sourceforge.net/)
@@ -28,13 +28,23 @@ CREATE table appears(
   uid     INTEGER PRIMARY KEY NOT NULL,
   words   tsvector
 );
-
-CREATE INDEX appears_uid ON appears (uid);
 """
 
 class PGIndexer(Indexer):
-    """postgresql indexer using native functionnalities (tsearch2)
-    """
+    """postgresql indexer using native functionnalities (tsearch2)"""
+    config = 'default'
+    
+    def has_fti_table(self, cursor):
+        if super(PGIndexer, self).has_fti_table(cursor):
+            cursor.execute('SELECT version()')
+            version = cursor.fetchone()[0].split()[1]
+            version = [int(i) for i in version.split('.')]
+            if version >= [8, 3, 0]:
+                print 'detected postgres 8.3'
+                self.config = 'simple'
+            else:
+                self.config = 'default'
+        return self.table in self.dbhelper.list_tables(cursor)
     
 
     def cursor_index_object(self, uid, obj, cursor):
@@ -43,8 +53,8 @@ class PGIndexer(Indexer):
         words = normalize_words(obj.get_words())
         if words:
             cursor.execute("INSERT INTO appears(uid, words) "
-                           "VALUES (%(uid)s,to_tsvector('default', %(wrds)s));",
-                           {'uid':uid, 'wrds': ' '.join(words)})
+                           "VALUES (%(uid)s,to_tsvector(%(config)s, %(wrds)s));",
+                           {'config': self.config, 'uid':uid, 'wrds': ' '.join(words)})
         
     def execute(self, querystr, cursor=None):
         """execute a full text query and return a list of 2-uple (rating, uid)
@@ -54,8 +64,8 @@ class PGIndexer(Indexer):
         words = normalize_words(tokenize(querystr))
         cursor = cursor or self._cnx.cursor()
         cursor.execute('SELECT 1, uid FROM appears '
-                       "WHERE words @@ to_tsquery('default', %(words)s)",
-                       {'words': '&'.join(words)})
+                       "WHERE words @@ to_tsquery(%(config)s, %(words)s)",
+                       {'config': self.config, 'words': '&'.join(words)})
         return cursor.fetchall()
     
     table = 'appears'
@@ -71,7 +81,7 @@ class PGIndexer(Indexer):
         # XXX replace '%' since it makes tsearch fail, dunno why yet, should
         # be properly fixed
         searched = '&'.join(words).replace('%', '')
-        sql = "%s.words @@ to_tsquery('default', '%s')" % (tablename, searched)
+        sql = "%s.words @@ to_tsquery('%s', '%s')" % (tablename, self.config, searched)
         if not_:
             sql = 'NOT (%s)' % sql
         if jointo is None:

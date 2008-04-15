@@ -72,7 +72,8 @@ def normalize_words(rawwords):
             continue
     return words
 
-class Indexer:
+
+class Indexer(object):
     """the base indexer
 
     provide an inefficient but generic indexing method which can be overridden

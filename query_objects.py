@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Copyright 2003-2006 Logilab - All Rights Reserved.
+"""Query objects for Generic Indexer.
 
-Query objects for Generic Indexer
+:copyright: 2003-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 import re
 

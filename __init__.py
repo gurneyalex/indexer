@@ -1,9 +1,15 @@
-"""Copyright 2002-2007 Logilab - All Rights Reserved.
+"""RQL library (implementation independant).
+
+:copyright: 2002-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
+from indexer.__pkginfo__ import version as __version__
 
 def get_indexer(driver, cnx=None, encoding='UTF-8'):
     """
-    return the indexer object according to the DB driver
+    Return the indexer object according to the DB driver.
     """
     if driver == 'postgres':
         from indexer.postgres8_indexer import PGIndexer

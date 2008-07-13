@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Copyright 2003-2007 Logilab -  All Rights Reserved.
+"""Generic Indexer, may be used on any database supporting the Python DB API.
 
-Generic Indexer, may be used on ony database supporting the python DB api
+:copyright: 2003-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 import re
 
@@ -37,7 +39,8 @@ CREATE INDEX appears_word_id ON appears (word_id);
 """
 
 def normalize(word):
-    """ Return the normalized form for a word
+    """Return the normalized form for a word.
+
     The word given in argument should be unicode !
 
     currently normalized word are :
@@ -74,9 +77,9 @@ def normalize_words(rawwords):
 
 
 class Indexer(object):
-    """the base indexer
+    """The base indexer.
 
-    provide an inefficient but generic indexing method which can be overridden
+    Provide an inefficient but generic indexing method which can be overridden.
     """
     table = 'appears'
     uid_attr = 'uid'

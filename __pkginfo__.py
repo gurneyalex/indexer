@@ -1,9 +1,10 @@
-"""
-Copyright (c) 2003-2007 LOGILAB S.A. (Paris, FRANCE).
-http://www.logilab.fr/ -- mailto:contact@logilab.fr
+"""Indexer packaging information.
 
-indexer packaging information
+:copyright: 2003-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 modname = "indexer"
 numversion = (0, 6, 2)

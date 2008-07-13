@@ -1,12 +1,14 @@
-"""
-Copyright 2005-2008 Logilab - All Rights Reserved.
-
-Indexer for postgres using tsearch2 from the openfts project
-(http://openfts.sourceforge.net/)
+"""Indexer for Postgresql using tsearch2 from the openfts project
+(see http://openfts.sourceforge.net/)
 
 Warning: you will need to run the tsearch2.sql script with super user privileges
-on the database. 
+on the database.
+
+:copyright: 2005-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 from os.path import join, dirname, isfile
 import glob
@@ -31,7 +33,8 @@ CREATE table appears(
 """
 
 class PGIndexer(Indexer):
-    """postgresql indexer using native functionnalities (tsearch2)"""
+    """Postgresql indexer using native functionnalities (tsearch2).
+    """
     config = 'default'
     
     def has_fti_table(self, cursor):
@@ -48,7 +51,8 @@ class PGIndexer(Indexer):
     
 
     def cursor_index_object(self, uid, obj, cursor):
-        """index an object, using the db pointed by the given cursor"""
+        """Index an object, using the db pointed by the given cursor.
+        """
         uid = int(uid)
         words = normalize_words(obj.get_words())
         if words:
@@ -57,7 +61,7 @@ class PGIndexer(Indexer):
                            {'config': self.config, 'uid':uid, 'wrds': ' '.join(words)})
         
     def execute(self, querystr, cursor=None):
-        """execute a full text query and return a list of 2-uple (rating, uid)
+        """Execute a full text query and return a list of 2-uple (rating, uid).
         """
         if isinstance(querystr, str):
             querystr = unicode(querystr, self.encoding)
@@ -73,7 +77,7 @@ class PGIndexer(Indexer):
     need_distinct = False
     
     def restriction_sql(self, tablename, querystr, jointo=None, not_=False):
-        """execute a full text query and return a list of 2-uple (rating, uid)
+        """Execute a full text query and return a list of 2-uple (rating, uid).
         """
         if isinstance(querystr, str):
             querystr = unicode(querystr, self.encoding)
@@ -89,7 +93,7 @@ class PGIndexer(Indexer):
         return "%s AND %s.uid=%s" % (sql, tablename, jointo)
 
     def find_tsearch2_schema(self):
-        """looks up for tsearch2.sql in a list of default paths
+        """Looks up for tsearch2.sql in a list of default paths.
         """
         for path in TSEARCH_SCHEMA_PATH:
             for fullpath in glob.glob(path):
@@ -99,9 +103,9 @@ class PGIndexer(Indexer):
         raise RuntimeError("can't find tsearch2.sql")
     
     def init_extensions(self, cursor, owner=None):
-        """if necessary, install extensions at database creation time
+        """If necessary, install extensions at database creation time.
         
-        for postgres, install tsearch2 if not installed by the template
+        For postgres, install tsearch2 if not installed by the template.
         """
         tstables = []
         for table in self.dbhelper.list_tables(cursor):
@@ -119,14 +123,14 @@ class PGIndexer(Indexer):
             print 'tsearch2.sql installed'
 
     def sql_init_fti(self):
-        """return the sql definition of table()s used by the full text index
+        """Return the sql definition of table()s used by the full text index.
 
-        require extensions to be already in
+        Require extensions to be already in.
         """
         return APPEARS_SCHEMA
 
     def sql_drop_fti(self):
-        """drop tables used by the full text index"""
+        """Drop tables used by the full text index."""
         return '''DROP INDEX appears_uid;
 DROP TABLE appears;'''
 

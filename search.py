@@ -1,9 +1,12 @@
-""" Copyright Logilab 2002-2003, all rights reserved.
-
-Execute a search in an indexer database
+"""Command to execute a search in an indexer database.
 
 USAGE: %s <query string>
+
+:copyright: 2002-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 import sys
 import getopt

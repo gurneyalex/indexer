@@ -1,8 +1,10 @@
-"""
-Copyright 2007 Logilab - All Rights Reserved.
+"""Indexer for mysql using MyISAM full text search capabilities.
 
-Indexer for mysql using MyISAM full text search capabilities
+:copyright: 2007-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 from os.path import join, dirname, isfile
 import glob
@@ -19,13 +21,14 @@ CREATE TABLE appears (
 """
 
 class MyIndexer(Indexer):
-    """mysql indexer using native functionnalities (FULLTEXT index type of MyISAM tables)
+    """Mysql indexer using native functionnalities (FULLTEXT index type of MyISAM tables)
 
     XXX rely on mysql fti parser / query language
     """
 
     def cursor_index_object(self, uid, obj, cursor):
-        """index an object, using the db pointed by the given cursor"""
+        """Index an object, using the db pointed by the given cursor.
+        """
         uid = int(uid)
         words = normalize_words(obj.get_words())
         if words:
@@ -34,7 +37,7 @@ class MyIndexer(Indexer):
                            {'uid':uid, 'wrds': ' '.join(words)})
         
     def execute(self, querystr, cursor=None):
-        """execute a full text query and return a list of 2-uple (rating, uid)
+        """Execute a full text query and return a list of 2-uple (rating, uid).
         """
         if isinstance(querystr, str):
             querystr = unicode(querystr, self.encoding)
@@ -50,7 +53,7 @@ class MyIndexer(Indexer):
     need_distinct = False
     
     def restriction_sql(self, tablename, querystr, jointo=None, not_=False):
-        """execute a full text query and return a list of 2-uple (rating, uid)
+        """Execute a full text query and return a list of 2-uple (rating, uid).
         """
         if isinstance(querystr, str):
             querystr = unicode(querystr, self.encoding)
@@ -63,11 +66,12 @@ class MyIndexer(Indexer):
         return "%s AND %s.uid=%s" % (sql, tablename, jointo)
 
     def sql_init_fti(self):
-        """return the sql definition of table()s used by the full text index"""
+        """Return the sql definition of table()s used by the full text index.
+        """
         return APPEARS_SCHEMA
 
     def sql_drop_fti(self):
-        """drop tables used by the full text index"""
+        """Drop tables used by the full text index."""
         return 'DROP TABLE appears;'
 
     def sql_grant_user(self, user):

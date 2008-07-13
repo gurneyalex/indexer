@@ -1,8 +1,10 @@
-"""
-Copyright 2003-2007 Logilab -  All Rights Reserved.
+"""Generic Indexer.
 
-Generic Indexer
+:copyright: 2003-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 import os
 import mimetypes
@@ -11,17 +13,15 @@ from indexer.query_objects import tokenize
 from indexer._exceptions import UnknownExtension, UnknownFileType
 
 class IIndexableObject:
-    """interface for indexable objects """
+    """Interface for indexable objects."""
         
     def get_words(self):
-        """ return words to be indexed
-        a word should be an unicode string
-        """
+        """Return words to be indexed a word should be an unicode string."""
         raise NotImplementedError()
 
 
 class AttributeIndexableMixIn(IIndexableObject):
-    """MixIn which allow to index some predefined attributes of any object
+    """MixIn which allow to index some predefined attributes of any object.
     """
     
     def __init__(self, indexable_attributes=None):
@@ -36,9 +36,7 @@ class AttributeIndexableMixIn(IIndexableObject):
             return self.__indexable_attributes
         
     def get_words(self):
-        """return words to be indexed
-        
-        a word is an unicode string
+        """Return words to be indexed (a word is an unicode string).
         """
         for attr in self.__indexable_attributes:
             value = getattr(self, attr, None)
@@ -48,7 +46,7 @@ class AttributeIndexableMixIn(IIndexableObject):
                 yield word
 
 class IndexableFile(IIndexableObject):
-    """Wrap a file to make it indexable if there is an adapter for it's type
+    """Wrap a file to make it indexable if there is an adapter for it's type.
     """
     
     def __init__(self, url, mime_type=None, encoding='UTF-8'):
@@ -67,8 +65,7 @@ class IndexableFile(IIndexableObject):
         # XXXFIXME: automaticly guess encoding from file ?
         
     def get_words(self):
-        """ return words to be indexed
-        a word should be an unicode string
+        """Return words to be indexed (a word should be an unicode string).
         """
         return self.adapter.get_words(self.url)
 
@@ -76,14 +73,13 @@ class IndexableFile(IIndexableObject):
 # File adapters ###############################################################
 
 class PlainTextAdapter:
-    """adapter for plain text files
-    """
+    """Adapter for plain text files."""
+    
     def __init__(self, encoding='UTF-8'):
         self.encoding = encoding
         
     def get_words(self, url):
-        """ return words to be indexed
-        a word should be an unicode string
+        """Return words to be indexed (a word should be an unicode string).
         """
         return self._get_words( open(url) )
 
@@ -95,8 +91,8 @@ class PlainTextAdapter:
 
 class ConverterAdapter(PlainTextAdapter):
     """
-    abstract class for file adapter using an external command to convert the
-    input file to plain text
+    Abstract class for file adapter using an external command to convert the
+    input file to plain text.
     """
     
     def __init__(self, command, encoding='UTF-8'):
@@ -104,23 +100,22 @@ class ConverterAdapter(PlainTextAdapter):
         self.command = command
         
     def get_words(self, url):
-        """ return words to be indexed
-        a word should be an unicode string
+        """Return words to be indexed (a word should be an unicode string).
         """
         return self._get_words( os.popen(self.command % url) )
 
 class HTMLAdapter(ConverterAdapter):
-    """html -> text adapter"""
+    """HTML -> text adapter"""
     def __init__(self, encoding='UTF-8'):
         ConverterAdapter.__init__(self, 'html2text %s', encoding)
         
 class PSAdapter(ConverterAdapter):
-    """postscript -> text adapter"""
+    """Postscript -> text adapter"""
     def __init__(self, encoding='UTF-8'):
         ConverterAdapter.__init__(self, 'ps2text %s', encoding)
         
 class PDFAdapter(ConverterAdapter):
-    """pdf -> text adapter"""
+    """PDF -> text adapter"""
     def __init__(self, encoding='UTF-8'):
         ConverterAdapter.__init__(self, 'pdftotext %s', encoding)
 

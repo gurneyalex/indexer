@@ -1,23 +1,19 @@
-"""
-Copyright (c) 2000-2003 LOGILAB S.A. (Paris, FRANCE).
-http://www.logilab.fr/ -- mailto:contact@logilab.fr
+"""Exceptions for the indexer modules.
 
-exceptions for the indexer modules
+:copyright: 2003-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
+:license: General Public License version 2 - http://www.gnu.org/licenses
 """
+__docformat__ = "restructuredtext en"
 
 class IndexerException(Exception):
-    """base class for indexer exception
-    """
+    """Base class for indexer exception."""
 
 class UnknownExtension(IndexerException):
-    """raised when an unknown extension is encountered
-    """
+    """Raised when an unknown extension is encountered."""
     
 class UnknownFileType(IndexerException): 
-    """raised when an unknown file type is encountered
-    """
-
+    """Raised when an unknown file type is encountered."""
 
 class StopWord(Exception):
-    """raised to indicate that a stop word has been encountered
-    """
+    """Raised to indicate that a stop word has been encountered."""

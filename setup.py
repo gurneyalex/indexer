@@ -8,8 +8,6 @@
 """
 __docformat__ = "restructuredtext en"
 
-from __future__ import nested_scopes
-
 import os
 import sys
 import shutil

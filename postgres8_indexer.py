@@ -43,7 +43,6 @@ class PGIndexer(Indexer):
             version = cursor.fetchone()[0].split()[1]
             version = [int(i) for i in version.split('.')]
             if version >= [8, 3, 0]:
-                print 'detected postgres 8.3'
                 self.config = 'simple'
             else:
                 self.config = 'default'

@@ -30,10 +30,10 @@ def run(*args):
             driver = opt
         elif opt in ('-h', '--help'):
             help()
-            
+
     if not args:
         help()
-    
+
     cnx = get_connection(driver, *db_uri.split(':'))
     indexer = Indexer(cnx)
     query = ' '.join(args)
@@ -44,4 +44,3 @@ def run(*args):
 
 if __name__ == '__main__':
     run(*sys.argv[1:])
-    

@@ -16,7 +16,7 @@ from indexer.query import IndexerQuery, IndexerQueryScanner
 from indexer.query_objects import Query, tokenize
 from indexer._exceptions import StopWord
 
-    
+
 REM_PUNC = re.compile(r"[,.;:!?\n\r\t\)\(«»\<\>/\\\|\[\]{}^#@$£_=+\-*&§]")
 
 SQL_SCHEMA = """
@@ -48,7 +48,7 @@ def normalize(word):
        _ without any accent
 
     This function may raise StopWord if the word shouldn't be indexed
-    
+
     stop words are :
        _ single letter
        _ numbers
@@ -84,7 +84,7 @@ class Indexer(object):
     table = 'appears'
     uid_attr = 'uid'
     need_distinct = True
-    
+
     def __init__(self, driver, cnx=None, encoding='UTF-8'):
         """cnx : optional Python DB API 2.0 connexion"""
         self.driver = driver
@@ -94,7 +94,7 @@ class Indexer(object):
 
     def has_fti_table(self, cursor):
         return self.table in self.dbhelper.list_tables(cursor)
-    
+
     def index_object(self, uid, obj, cnx=None):
         """ index an object with the given uid
         the object should inherit from or be compatible with Indexable object
@@ -108,7 +108,7 @@ class Indexer(object):
         except:
             cnx.rollback()
             raise
-            
+
     def unindex_object(self, uid, cnx=None):
         """ unindex an object
         the object should inherit from or be compatible with Indexable object
@@ -149,7 +149,7 @@ class Indexer(object):
     def cursor_reindex_object(self, uid, obj, cursor):
         self.cursor_unindex_object(uid, cursor)
         self.cursor_index_object(uid, obj, cursor)
-        
+
     def _save_word(self, uid, word, position, cursor):
         try:
             word = normalize(word)
@@ -175,7 +175,7 @@ class Indexer(object):
         cursor.execute("INSERT INTO appears(uid, word_id, pos) "
                        "VALUES (%(uid)s,%(wid)s,%(position)s);",
                        {'uid': uid, 'wid': wid, 'position': position})
-        
+
     def execute(self, query_string, cursor=None):
         """execute a full text query and return a list of 2-uple (rating, uid)
         """
@@ -204,7 +204,7 @@ class Indexer(object):
     def init_extensions(self, cursor, owner=None):
         """if necessary, install extensions at database creation time"""
         pass
-    
+
     def sql_init_fti(self):
         """return the sql definition of table()s used by the full text index"""
         return SQL_SCHEMA % self.dbhelper.sql_create_sequence('word_id_seq')

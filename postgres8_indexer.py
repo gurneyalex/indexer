@@ -18,7 +18,7 @@ from indexer.query_objects import tokenize
 
 
 
-TSEARCH_SCHEMA_PATH = ('/usr/share/postgresql/?.?/contrib/tsearch2.sql', # current debian 
+TSEARCH_SCHEMA_PATH = ('/usr/share/postgresql/?.?/contrib/tsearch2.sql', # current debian
                        '/usr/lib/postgresql/share/contrib/tsearch2.sql',
                        '/usr/share/postgresql/contrib/tsearch2.sql',
                        '/usr/lib/postgresql-?.?/share/contrib/tsearch2.sql',
@@ -36,7 +36,7 @@ class PGIndexer(Indexer):
     """Postgresql indexer using native functionnalities (tsearch2).
     """
     config = 'default'
-    
+
     def has_fti_table(self, cursor):
         if super(PGIndexer, self).has_fti_table(cursor):
             cursor.execute('SELECT version()')
@@ -47,7 +47,7 @@ class PGIndexer(Indexer):
             else:
                 self.config = 'default'
         return self.table in self.dbhelper.list_tables(cursor)
-    
+
 
     def cursor_index_object(self, uid, obj, cursor):
         """Index an object, using the db pointed by the given cursor.
@@ -58,7 +58,7 @@ class PGIndexer(Indexer):
             cursor.execute("INSERT INTO appears(uid, words) "
                            "VALUES (%(uid)s,to_tsvector(%(config)s, %(wrds)s));",
                            {'config': self.config, 'uid':uid, 'wrds': ' '.join(words)})
-        
+
     def execute(self, querystr, cursor=None):
         """Execute a full text query and return a list of 2-uple (rating, uid).
         """
@@ -70,11 +70,11 @@ class PGIndexer(Indexer):
                        "WHERE words @@ to_tsquery(%(config)s, %(words)s)",
                        {'config': self.config, 'words': '&'.join(words)})
         return cursor.fetchall()
-    
+
     table = 'appears'
     uid_attr = 'uid'
     need_distinct = False
-    
+
     def restriction_sql(self, tablename, querystr, jointo=None, not_=False):
         """Execute a full text query and return a list of 2-uple (rating, uid).
         """
@@ -100,10 +100,10 @@ class PGIndexer(Indexer):
                     # tsearch2.sql found !
                     return fullpath
         raise RuntimeError("can't find tsearch2.sql")
-    
+
     def init_extensions(self, cursor, owner=None):
         """If necessary, install extensions at database creation time.
-        
+
         For postgres, install tsearch2 if not installed by the template.
         """
         tstables = []
@@ -135,4 +135,3 @@ DROP TABLE appears;'''
 
     def sql_grant_user(self, user):
         return 'GRANT ALL ON appears TO %s;' % (user)
-            

@@ -28,12 +28,12 @@ class Query:
     the query parser'll call add_word and add_phrase on this object accoring to
     the query string (see query.g for the query string's grammar)
     """
-    
+
     def __init__(self, normalize):
         self.normalize = normalize
         self.words = {}
         self.phrases = []
-        
+
     def add_word(self, word):
         """ add a single word query """
         try:
@@ -59,22 +59,22 @@ class Query:
         yield a list of 2-uple (rating, uid)
         """
         assert self.words or self.phrases
-        
+
         # keywords query
         if not self.words:
-            results = {}            
+            results = {}
         else:
             results = KeywordsQuery(self.words.keys()).dict_query(cursor)
             if not results:
                 raise StopIteration()
-            
+
         # phrase queries
         for q in self.phrases:
             _results = q.dict_query(cursor, results and results.keys() or None)
             if not _results:
                 yield ()
                 # return ()
-            # adjust rating 
+            # adjust rating
             for uid, rating in results.items():
                 try:
                     _results[uid] += rating
@@ -84,21 +84,21 @@ class Query:
 
         for uid, rating in results.items():
             yield (rating, uid)
-                
-           
-        
+
+
+
 class KeywordsQuery:
     """
     a keywords query'll look for uid matching all those words in any order
     """
-    
+
     def __init__(self, words):
         self.words = words
-        
+
     def dict_query(self, cursor, uids=None):
         """ execute this query using the given cursor
         the query maybe restricted to a given list of uids
-        
+
         return a dict with uid as keys and rating as value
         """
         results = {}
@@ -120,7 +120,7 @@ class KeywordsQuery:
             results[uid] = rating
         return results
 
-            
+
 class PhraseQuery:
     """
     a phrase query'll look for uid matching all phrase's tokens in the same order
@@ -128,11 +128,11 @@ class PhraseQuery:
 
     def __init__(self, tokens):
         self.tokens = tokens
-    
+
     def dict_query(self, cursor, uids=None):
         """ execute this query using the given cursor
         the query maybe restricted to a given list of uids
-        
+
         return a dict with uid as keys and rating as value
         """
         results = {}

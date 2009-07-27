@@ -2,7 +2,7 @@
 import unittest
 
 from logilab.common.testlib import MockConnection
-    
+
 from indexer.query_objects import tokenize
 from indexer.default_indexer import Indexer
 
@@ -10,13 +10,13 @@ class IndexableObject:
     def get_words(self):
         return tokenize(u'gïnco-jpl blâ blîp blôp blàp')
 
-    
+
 class IndexerTC(unittest.TestCase):
 
     def setUp(self):
         self.cnx = MockConnection( ([1, 2],) )
         self.indexer = Indexer('sqlite', self.cnx)
-        
+
     def test_index_object(self):
         self.indexer.index_object(1, IndexableObject())
         self.assertEquals(self.cnx.received,
@@ -32,14 +32,14 @@ class IndexerTC(unittest.TestCase):
                            ('INSERT INTO appears(uid, word_id, pos) VALUES (%(uid)s,%(wid)s,%(position)s);', {'position': 4, 'wid': 1, 'uid': 1}),
                            ('SELECT word_id FROM word WHERE word=%(word)s;', {'word': 'blap'}),
                            ('INSERT INTO appears(uid, word_id, pos) VALUES (%(uid)s,%(wid)s,%(position)s);', {'position': 5, 'wid': 1, 'uid': 1})])
-        
+
     def test_execute(self):
         list(self.indexer.execute(u'ginco'))
         self.assertEquals(self.cnx.received,
                           [('SELECT count(*) as rating, appears0.uid FROM appears as appears0, word as word0 WHERE word0.word = %(word0)s  AND word0.word_id = appears0.word_id  GROUP BY appears0.uid ;',
                             {'word0': 'ginco'})
                            ])
-        
+
     def test_execute2(self):
         list(self.indexer.execute(u'ginco-jpl'))
         self.assertEquals(self.cnx.received,
@@ -47,7 +47,7 @@ class IndexerTC(unittest.TestCase):
                             {'word1': 'jpl', 'word0': 'ginco'})
                            ])
 
-        
+
 class GetSchemaTC(unittest.TestCase):
 
     def test(self):
@@ -72,6 +72,6 @@ CREATE TABLE appears(
 CREATE INDEX appears_uid ON appears (uid);
 CREATE INDEX appears_word_id ON appears (word_id);
 ''')
-        
+
 if __name__ == '__main__':
     unittest.main()

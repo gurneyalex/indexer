@@ -95,6 +95,14 @@ class Indexer(object):
     def has_fti_table(self, cursor):
         return self.table in self.dbhelper.list_tables(cursor)
 
+    def init_fti(self, cursor):
+        self.init_extensions(cursor)
+        cursor.execute(self.sql_init_fti())
+
+    def init_extensions(self, cursor, owner=None):
+        """if necessary, install extensions at database creation time"""
+        pass
+
     def index_object(self, uid, obj, cnx=None):
         """ index an object with the given uid
         the object should inherit from or be compatible with Indexable object
@@ -200,10 +208,6 @@ class Indexer(object):
         if jointo is None:
             return sql
         return '%s AND %s.uid=%s' % (sql, tablename, jointo)
-
-    def init_extensions(self, cursor, owner=None):
-        """if necessary, install extensions at database creation time"""
-        pass
 
     def sql_init_fti(self):
         """return the sql definition of table()s used by the full text index"""

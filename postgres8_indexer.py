@@ -40,7 +40,7 @@ class PGIndexer(Indexer):
     def has_fti_table(self, cursor):
         if super(PGIndexer, self).has_fti_table(cursor):
             cursor.execute('SELECT version()')
-            version = cursor.fetchone()[0].split()[1]
+            version = cursor.fetchone()[0].split()[1].split(',')[0]
             version = [int(i) for i in version.split('.')]
             if version >= [8, 3, 0]:
                 self.config = 'simple'

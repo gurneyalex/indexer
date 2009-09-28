@@ -25,6 +25,8 @@ TSEARCH_SCHEMA_PATH = ('/usr/share/postgresql/?.?/contrib/tsearch2.sql', # curre
                        '/usr/share/postgresql-?.?/contrib/tsearch2.sql',
                        join(dirname(__file__), 'tsearch2.sql'),
                        'tsearch2.sql')
+
+# XXX create GIN or GIST index, see FTS wiki
 APPEARS_SCHEMA = """
 CREATE table appears(
   uid     INTEGER PRIMARY KEY NOT NULL,

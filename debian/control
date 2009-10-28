@@ -1,12 +1,13 @@
 Source: indexer
 Section: python
 Priority: optional
-Maintainer: Sylvain Thenault <sylvain.thenault@logilab.fr> 
+Maintainer: Sylvain Thenault <sylvain.thenault@logilab.fr>
 Uploaders: Alexandre Fayolle <afayolle@debian.org>
 Build-Depends: debhelper (>= 5.0.38)
 Build-Depends-Indep: python (>=2.3.5-7), python-central (>= 0.5.6)
 XS-Python-Version: all
 Standards-Version: 3.7.2
+Homepage: http://www.logilab.org/project/indexer
 
 Package: python-indexer
 Architecture: all
@@ -18,4 +19,4 @@ XB-Python-Version: ${python:Versions}
 Description: a RDBMS full text index library for Python
  A library providing an abstraction for full text index in
  different RDBMS, using when possible native capabilites of the DBMS
- 
+

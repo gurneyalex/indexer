@@ -4,7 +4,7 @@
 Warning: you will need to run the tsearch2.sql script with super user privileges
 on the database.
 
-:copyright: 2005-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:copyright: 2005-2009 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
 :contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
 :license: General Public License version 2 - http://www.gnu.org/licenses
 """
@@ -25,6 +25,8 @@ TSEARCH_SCHEMA_PATH = ('/usr/share/postgresql/?.?/contrib/tsearch2.sql', # curre
                        '/usr/share/postgresql-?.?/contrib/tsearch2.sql',
                        join(dirname(__file__), 'tsearch2.sql'),
                        'tsearch2.sql')
+
+# XXX create GIN or GIST index, see FTS wiki
 APPEARS_SCHEMA = """
 CREATE table appears(
   uid     INTEGER PRIMARY KEY NOT NULL,
@@ -36,6 +38,7 @@ class PGIndexer(Indexer):
     """Postgresql indexer using native functionnalities (tsearch2).
     """
     config = 'default'
+    max_indexed = 500000 # 500KB, avoid "string is too long for tsvector"
 
     def has_fti_table(self, cursor):
         if super(PGIndexer, self).has_fti_table(cursor):
@@ -54,6 +57,12 @@ class PGIndexer(Indexer):
         """
         uid = int(uid)
         words = normalize_words(obj.get_words())
+        size = 0
+        for i, word in enumerate(words):
+            size += len(word) + 1
+            if size > self.max_indexed:
+                words = words[:i]
+                break
         if words:
             cursor.execute("INSERT INTO appears(uid, words) "
                            "VALUES (%(uid)s,to_tsvector(%(config)s, %(wrds)s));",

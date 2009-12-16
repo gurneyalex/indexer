@@ -139,8 +139,7 @@ class PGIndexer(Indexer):
 
     def sql_drop_fti(self):
         """Drop tables used by the full text index."""
-        return '''DROP INDEX appears_uid;
-DROP TABLE appears;'''
+        return '''DROP TABLE appears;'''
 
     def sql_grant_user(self, user):
         return 'GRANT ALL ON appears TO %s;' % (user)

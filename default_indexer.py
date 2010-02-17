@@ -216,7 +216,7 @@ class Indexer(object):
     def sql_drop_fti(self):
         """drop tables used by the full text index"""
         return '''DROP TABLE appears;
-DROP TABLE word;'''
+DROP TABLE word; %s''' % self.dbhelper.sql_drop_sequence('word_id_seq')
 
 
     def sql_grant_user(self, user):

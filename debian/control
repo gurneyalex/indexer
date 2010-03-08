@@ -1,8 +1,8 @@
 Source: indexer
 Section: python
 Priority: optional
-Maintainer: Sylvain Thenault <sylvain.thenault@logilab.fr>
-Uploaders: Alexandre Fayolle <afayolle@debian.org>
+Maintainer: Sylvain Thenault <sylvain.thenault@logilab.fr> 
+Uploaders: Alexandre Fayolle <afayolle@debian.org>, Julien Jehannet <julien.jehannet@logilab.fr>
 Build-Depends: debhelper (>= 5.0.38)
 Build-Depends-Indep: python (>=2.3.5-7), python-central (>= 0.5.6)
 XS-Python-Version: all

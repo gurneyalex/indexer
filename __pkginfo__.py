@@ -7,7 +7,7 @@
 __docformat__ = "restructuredtext en"
 
 modname = "indexer"
-numversion = (0, 6, 2)
+numversion = (0, 6, 3)
 version = '.'.join([str(num) for num in numversion])
 
 license = 'LCL'

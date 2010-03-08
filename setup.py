@@ -42,7 +42,7 @@ except ImportError:
 
 BASE_BLACKLIST = ('CVS', 'debian', 'dist', 'build', '__buildlog')
 IGNORED_EXTENSIONS = ('.pyc', '.pyo', '.elc')
-    
+
 
 def ensure_scripts(linuxScripts):
     """
@@ -118,7 +118,7 @@ def export(from_dir, to_dir,
             import errno
             if ex.errno != errno.EEXIST:
                 raise
-        
+
 
 
 class InstallLib(install_lib.install_lib):
@@ -151,6 +151,6 @@ def install(**kwargs):
                  ext_modules=ext_modules,
                  cmdclass={'install_lib': InstallLib},
                  **kwargs)
-            
+
 if __name__ == '__main__' :
     install()

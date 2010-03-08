@@ -14,7 +14,7 @@ from indexer._exceptions import UnknownExtension, UnknownFileType
 
 class IIndexableObject:
     """Interface for indexable objects."""
-        
+
     def get_words(self):
         """Return words to be indexed a word should be an unicode string."""
         raise NotImplementedError()
@@ -23,7 +23,7 @@ class IIndexableObject:
 class AttributeIndexableMixIn(IIndexableObject):
     """MixIn which allow to index some predefined attributes of any object.
     """
-    
+
     def __init__(self, indexable_attributes=None):
         if indexable_attributes is not None:
             self.indexable_attributes(indexable_attributes)
@@ -34,7 +34,7 @@ class AttributeIndexableMixIn(IIndexableObject):
             self.__indexable_attributes = indexable_attributes
         else:
             return self.__indexable_attributes
-        
+
     def get_words(self):
         """Return words to be indexed (a word is an unicode string).
         """
@@ -48,7 +48,7 @@ class AttributeIndexableMixIn(IIndexableObject):
 class IndexableFile(IIndexableObject):
     """Wrap a file to make it indexable if there is an adapter for it's type.
     """
-    
+
     def __init__(self, url, mime_type=None, encoding='UTF-8'):
         self.url = url
         # get mime_type if necessary
@@ -63,7 +63,7 @@ class IndexableFile(IIndexableObject):
             raise UnknownFileType('Unable to get an adapter for MIME type %s'
                                   % mime_type)
         # XXXFIXME: automaticly guess encoding from file ?
-        
+
     def get_words(self):
         """Return words to be indexed (a word should be an unicode string).
         """
@@ -74,10 +74,10 @@ class IndexableFile(IIndexableObject):
 
 class PlainTextAdapter:
     """Adapter for plain text files."""
-    
+
     def __init__(self, encoding='UTF-8'):
         self.encoding = encoding
-        
+
     def get_words(self, url):
         """Return words to be indexed (a word should be an unicode string).
         """
@@ -94,11 +94,11 @@ class ConverterAdapter(PlainTextAdapter):
     Abstract class for file adapter using an external command to convert the
     input file to plain text.
     """
-    
+
     def __init__(self, command, encoding='UTF-8'):
         PlainTextAdapter.__init__(self, encoding)
         self.command = command
-        
+
     def get_words(self, url):
         """Return words to be indexed (a word should be an unicode string).
         """
@@ -108,12 +108,12 @@ class HTMLAdapter(ConverterAdapter):
     """HTML -> text adapter"""
     def __init__(self, encoding='UTF-8'):
         ConverterAdapter.__init__(self, 'html2text %s', encoding)
-        
+
 class PSAdapter(ConverterAdapter):
     """Postscript -> text adapter"""
     def __init__(self, encoding='UTF-8'):
         ConverterAdapter.__init__(self, 'ps2text %s', encoding)
-        
+
 class PDFAdapter(ConverterAdapter):
     """PDF -> text adapter"""
     def __init__(self, encoding='UTF-8'):
@@ -123,12 +123,10 @@ class PDFAdapter(ConverterAdapter):
 FILE_ADAPTERS = {
     'text/plain'    : PlainTextAdapter,
     'text/x-python' : PlainTextAdapter,
-    
+
     'text/html' : HTMLAdapter,
-    
+
     'application/postscript': PSAdapter,
-    
+
     'application/pdf': PDFAdapter,
     }
-
-                

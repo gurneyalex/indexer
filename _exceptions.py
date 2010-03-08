@@ -11,8 +11,8 @@ class IndexerException(Exception):
 
 class UnknownExtension(IndexerException):
     """Raised when an unknown extension is encountered."""
-    
-class UnknownFileType(IndexerException): 
+
+class UnknownFileType(IndexerException):
     """Raised when an unknown file type is encountered."""
 
 class StopWord(Exception):

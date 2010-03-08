@@ -4,7 +4,7 @@
 Warning: you will need to run the tsearch2.sql script with super user privileges
 on the database.
 
-:copyright: 2005-2008 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
+:copyright: 2005-2009 LOGILAB S.A. (Paris, FRANCE), all rights reserved.
 :contact: http://www.logilab.fr/ -- mailto:contact@logilab.fr
 :license: General Public License version 2 - http://www.gnu.org/licenses
 """
@@ -18,13 +18,15 @@ from indexer.query_objects import tokenize
 
 
 
-TSEARCH_SCHEMA_PATH = ('/usr/share/postgresql/?.?/contrib/tsearch2.sql', # current debian 
+TSEARCH_SCHEMA_PATH = ('/usr/share/postgresql/?.?/contrib/tsearch2.sql', # current debian
                        '/usr/lib/postgresql/share/contrib/tsearch2.sql',
                        '/usr/share/postgresql/contrib/tsearch2.sql',
                        '/usr/lib/postgresql-?.?/share/contrib/tsearch2.sql',
                        '/usr/share/postgresql-?.?/contrib/tsearch2.sql',
                        join(dirname(__file__), 'tsearch2.sql'),
                        'tsearch2.sql')
+
+# XXX create GIN or GIST index, see FTS wiki
 APPEARS_SCHEMA = """
 CREATE table appears(
   uid     INTEGER PRIMARY KEY NOT NULL,
@@ -36,30 +38,36 @@ class PGIndexer(Indexer):
     """Postgresql indexer using native functionnalities (tsearch2).
     """
     config = 'default'
-    
+    max_indexed = 500000 # 500KB, avoid "string is too long for tsvector"
+
     def has_fti_table(self, cursor):
         if super(PGIndexer, self).has_fti_table(cursor):
             cursor.execute('SELECT version()')
-            version = cursor.fetchone()[0].split()[1]
+            version = cursor.fetchone()[0].split()[1].split(',')[0]
             version = [int(i) for i in version.split('.')]
             if version >= [8, 3, 0]:
-                print 'detected postgres 8.3'
                 self.config = 'simple'
             else:
                 self.config = 'default'
         return self.table in self.dbhelper.list_tables(cursor)
-    
+
 
     def cursor_index_object(self, uid, obj, cursor):
         """Index an object, using the db pointed by the given cursor.
         """
         uid = int(uid)
         words = normalize_words(obj.get_words())
+        size = 0
+        for i, word in enumerate(words):
+            size += len(word) + 1
+            if size > self.max_indexed:
+                words = words[:i]
+                break
         if words:
             cursor.execute("INSERT INTO appears(uid, words) "
                            "VALUES (%(uid)s,to_tsvector(%(config)s, %(wrds)s));",
                            {'config': self.config, 'uid':uid, 'wrds': ' '.join(words)})
-        
+
     def execute(self, querystr, cursor=None):
         """Execute a full text query and return a list of 2-uple (rating, uid).
         """
@@ -71,11 +79,11 @@ class PGIndexer(Indexer):
                        "WHERE words @@ to_tsquery(%(config)s, %(words)s)",
                        {'config': self.config, 'words': '&'.join(words)})
         return cursor.fetchall()
-    
+
     table = 'appears'
     uid_attr = 'uid'
     need_distinct = False
-    
+
     def restriction_sql(self, tablename, querystr, jointo=None, not_=False):
         """Execute a full text query and return a list of 2-uple (rating, uid).
         """
@@ -101,10 +109,10 @@ class PGIndexer(Indexer):
                     # tsearch2.sql found !
                     return fullpath
         raise RuntimeError("can't find tsearch2.sql")
-    
+
     def init_extensions(self, cursor, owner=None):
         """If necessary, install extensions at database creation time.
-        
+
         For postgres, install tsearch2 if not installed by the template.
         """
         tstables = []
@@ -131,9 +139,7 @@ class PGIndexer(Indexer):
 
     def sql_drop_fti(self):
         """Drop tables used by the full text index."""
-        return '''DROP INDEX appears_uid;
-DROP TABLE appears;'''
+        return '''DROP TABLE appears;'''
 
     def sql_grant_user(self, user):
         return 'GRANT ALL ON appears TO %s;' % (user)
-            

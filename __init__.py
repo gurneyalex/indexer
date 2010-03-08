@@ -26,6 +26,5 @@ def get_indexer(driver, cnx=None, encoding='UTF-8'):
         from indexer.mysql_indexer import MyIndexer
         return MyIndexer(driver, cnx, encoding)
     else:
-        from indexer.default_indexer import Indexer 
+        from indexer.default_indexer import Indexer
         return Indexer(driver, cnx, encoding)
-    

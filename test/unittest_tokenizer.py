@@ -19,7 +19,7 @@ class TokenizeTC(unittest.TestCase):
     def test_utf8(self):
         self.assertEquals(_tokenize(u'n°2'),
                           ['n2'])
-        
+
 
 if __name__ == '__main__':
     unittest.main()
